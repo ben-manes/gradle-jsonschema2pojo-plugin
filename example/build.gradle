@@ -1,0 +1,26 @@
+apply plugin: 'jsonschema2pojo'
+apply plugin: 'java'
+
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'com.github.ben-manes:gradle-jsonschema2pojo-plugin:latest.integration'
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+}
+
+compileJava.dependsOn(generateJsonSchema2Pojo)
+
+jsonSchema2Pojo {
+  
+}
