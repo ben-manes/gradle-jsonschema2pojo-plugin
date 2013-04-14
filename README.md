@@ -22,7 +22,7 @@ buildscript {
 }
 
 jsonSchema2Pojo {
-  // TODO
+  targetPackage = 'com.example'
 }
 ```
 

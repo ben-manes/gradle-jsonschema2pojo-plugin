@@ -25,14 +25,32 @@ import org.gradle.api.tasks.TaskAction
  * @author Ben Manes (ben.manes@gmail.com)
  */
 class GenerateJsonSchemaTask extends DefaultTask {
+  def configuration
 
   GenerateJsonSchemaTask() {
     description = 'Generates Java classes from a json schema.'
     group = 'Build'
+
+    project.afterEvaluate {
+      configure()
+      outputs.dir configuration.targetDirectory
+      project.sourceSets.main.java.srcDirs += [ configuration.targetDirectory ]
+    }
+    dependsOn(project.tasks.processResources)
+    project.tasks.compileJava.dependsOn(this)
   }
 
   @TaskAction
-  def generateJooq() {
-    Jsonschema2Pojo.generate(project.jsonSchema2Pojo)
+  def generate() {
+    Jsonschema2Pojo.generate(configuration)
+  }
+
+  def configure() {
+    configuration = project.jsonSchema2Pojo
+    if (!configuration.source.hasNext()) {
+      configuration.source = project.files("${project.sourceSets.main.output.resourcesDir}")
+    }
+    configuration.targetDirectory = configuration.targetDirectory ?:
+      new File("${project.buildDir}/generated-sources/js2p")
   }
 }

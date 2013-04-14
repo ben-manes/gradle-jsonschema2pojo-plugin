@@ -27,7 +27,7 @@ dependencies {
 
 jar {
   manifest {
-      attributes 'Implementation-Title': 'Gradle jOOQ plugin',
+      attributes 'Implementation-Title': 'Gradle Json Schema to Pojo plugin',
                  'Implementation-Version': version,
                  'Built-By': System.getProperty('user.name'),
                  'Built-Date': new Date(),

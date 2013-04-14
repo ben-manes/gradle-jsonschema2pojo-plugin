@@ -17,7 +17,8 @@ package com.github.benmanes.gradle.jsonschema2pojo
 
 import com.googlecode.jsonschema2pojo.AnnotationStyle
 import com.googlecode.jsonschema2pojo.Annotator
-import com.googlecode.jsonschema2pojo.DefaultGenerationConfig
+import com.googlecode.jsonschema2pojo.GenerationConfig
+import com.googlecode.jsonschema2pojo.NoopAnnotator
 import com.googlecode.jsonschema2pojo.SourceType
 
 /**
@@ -26,32 +27,40 @@ import com.googlecode.jsonschema2pojo.SourceType
  * @author Ben Manes (ben.manes@gmail.com)
  * @see https://code.google.com/p/jsonschema2pojo/
  */
-public class JsonSchemaExtension extends DefaultGenerationConfig {
+public class JsonSchemaExtension implements GenerationConfig {
 
-  /**
-   * Add the output directory to the project as a source root, so that the generated java types
-   * are compiled and included in the project artifact.
-   */
-  boolean addCompileSourceRoot = true
+  boolean generateBuilders = false
+  boolean usePrimitives = false
+  Iterator<File> source
+  File targetDirectory
+  String targetPackage = ''
+  char[] propertyWordDelimiters
+  boolean useLongIntegers = false
+  boolean includeHashcodeAndEquals = true
+  boolean includeToString = true
+  AnnotationStyle annotationStyle = AnnotationStyle.JACKSON
+  Class<? extends Annotator> customAnnotator = NoopAnnotator.class
+  boolean includeJsr303Annotations = false
+  SourceType sourceType = SourceType.JSONSCHEMA
 
-  /**
-   * The style of annotations to use in the generated Java types. Supported values:
-   * <ul>
-   *   <li>jackson2 (apply annotations from the Jackson 2.x library)
-   *   <li>jackson1 (apply annotations from the Jackson 1.x library)
-   *   <li>none (apply no annotations at all)
-   * </ul>
-   */
-  String annotationStyle = 'jackson2'
+  public JsonSchemaExtension() {
+    source = [].iterator()
+    propertyWordDelimiters = [] as char[]
+  }
 
-  /**
-   * A fully qualified class name, referring to a custom annotator class that implements
-   * {@link com.googlecode.jsonschema2pojo.Annotator} and will be used in addition to the
-   * one chosen by annotationStyle.
-   */
-  String customAnnotator = 'com.googlecode.jsonschema2pojo.NoopAnnotator'
+  public void setSource(Iterable<File> files) {
+    source = files.iterator()
+  }
 
-  public Iterator<File> getSource() {
-    [new File("src/test/resources/json/address.json")].iterator()
+  public void setAnnotationStyle(String style) {
+    annotationStyle = AnnotationStyle.valueOf(style.toUpperCase())
+  }
+
+  public void setCustomAnnotator(String clazz) {
+    customAnnotator = Class.forName(clazz)
+  }
+
+  public void setSourceType(String sourceType) {
+    SourceType.JSONSCHEMA.valueOf(sourceType.toUpperCase())
   }
 }

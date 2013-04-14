@@ -1,5 +1,4 @@
 apply plugin: 'jsonschema2pojo'
-apply plugin: 'java'
 
 buildscript {
   repositories {
@@ -17,10 +16,15 @@ repositories {
 }
 
 dependencies {
+  compile 'commons-lang:commons-lang:2.6'
+  compile 'javax.validation:validation-api:1.1.0.CR2'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.1.4'
 }
 
-compileJava.dependsOn(generateJsonSchema2Pojo)
-
 jsonSchema2Pojo {
+  generateJsonSchema2Pojo.dependsOn(processTestResources)
   
+  source = files("${project.sourceSets.test.output.resourcesDir}/json")
+  targetPackage = 'example'
+  includeJsr303Annotations = true
 }
