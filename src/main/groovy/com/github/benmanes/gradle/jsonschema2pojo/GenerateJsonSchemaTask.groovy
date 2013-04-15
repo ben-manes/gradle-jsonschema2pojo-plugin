@@ -44,6 +44,7 @@ class GenerateJsonSchemaTask extends DefaultTask {
 
   @TaskAction
   def generate() {
+    logger.info 'Using this configuration:\n{}', configuration
     Jsonschema2Pojo.generate(configuration)
   }
 
@@ -51,7 +52,7 @@ class GenerateJsonSchemaTask extends DefaultTask {
     configuration = project.jsonSchema2Pojo
     if (!configuration.source.hasNext()) {
       configuration.source = project.files("${project.sourceSets.main.output.resourcesDir}/json")
-      configuration.source.mkdir()
+      configuration.source.each { it.mkdir() }
     }
     configuration.targetDirectory = configuration.targetDirectory ?:
       project.file("${project.buildDir}/generated-sources/js2p")

@@ -6,7 +6,7 @@ describes the rules and their effect on generated Java types.
 
 ## Usage
 
-This plugin is hosted on the Maven Central Repository.
+This plugin is hosted on the Maven Central Repository. All actions are logged at the `info` level.
 
 ```groovy
 apply plugin: 'jsonschema2pojo'

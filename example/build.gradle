@@ -22,9 +22,6 @@ dependencies {
 }
 
 jsonSchema2Pojo {
-  generateJsonSchema2Pojo.dependsOn(processTestResources)
-  
-  source = files("${project.sourceSets.test.output.resourcesDir}/json")
   targetPackage = 'example'
   includeJsr303Annotations = true
 }

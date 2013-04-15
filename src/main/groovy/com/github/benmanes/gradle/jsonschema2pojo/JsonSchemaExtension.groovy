@@ -20,7 +20,6 @@ import com.googlecode.jsonschema2pojo.Annotator
 import com.googlecode.jsonschema2pojo.GenerationConfig
 import com.googlecode.jsonschema2pojo.NoopAnnotator
 import com.googlecode.jsonschema2pojo.SourceType
-import groovy.transform.ToString
 
 /**
  * The configuration properties.
@@ -28,11 +27,10 @@ import groovy.transform.ToString
  * @author Ben Manes (ben.manes@gmail.com)
  * @see https://code.google.com/p/jsonschema2pojo
  */
-@ToString
 public class JsonSchemaExtension implements GenerationConfig {
   boolean generateBuilders
   boolean usePrimitives
-  Iterator<File> source
+  Iterable<File> sourceFiles
   File targetDirectory
   String targetPackage
   char[] propertyWordDelimiters
@@ -48,7 +46,7 @@ public class JsonSchemaExtension implements GenerationConfig {
     // See DefaultGenerationConfig
     generateBuilders = false
     usePrimitives = false
-    source = [].iterator()
+    sourceFiles = []
     targetPackage = ''
     propertyWordDelimiters = [] as char[]
     useLongIntegers = false
@@ -60,8 +58,15 @@ public class JsonSchemaExtension implements GenerationConfig {
     sourceType = SourceType.JSONSCHEMA
   }
 
+  @Override
+  public Iterator<File> getSource() {
+    sourceFiles.iterator()
+  }
+
   public void setSource(Iterable<File> files) {
-    source = files.iterator()
+    def copy = [] as List
+    files.each { copy.add(it) }
+    sourceFiles = copy
   }
 
   public void setAnnotationStyle(String style) {
@@ -74,5 +79,23 @@ public class JsonSchemaExtension implements GenerationConfig {
 
   public void setSourceType(String sourceType) {
     SourceType.JSONSCHEMA.valueOf(sourceType.toUpperCase())
+  }
+
+  @Override
+  public String toString() {
+    """|generateBuilders = ${generateBuilders}
+       |usePrimitives = ${usePrimitives}
+       |source = ${sourceFiles}
+       |targetDirectory = ${targetDirectory}
+       |targetPackage = ${targetPackage}
+       |propertyWordDelimiters = ${Arrays.toString(propertyWordDelimiters)}
+       |useLongIntegers = ${useLongIntegers}
+       |includeHashcodeAndEquals = ${includeHashcodeAndEquals}
+       |includeToString = ${includeToString}
+       |annotationStyle = ${annotationStyle.toString().toLowerCase()}
+       |customAnnotator = ${customAnnotator.getName()}
+       |includeJsr303Annotations = ${includeJsr303Annotations}
+       |sourceType = ${sourceType.toString().toLowerCase()}
+     """.stripMargin()
   }
 }
