@@ -20,32 +20,44 @@ import com.googlecode.jsonschema2pojo.Annotator
 import com.googlecode.jsonschema2pojo.GenerationConfig
 import com.googlecode.jsonschema2pojo.NoopAnnotator
 import com.googlecode.jsonschema2pojo.SourceType
+import groovy.transform.ToString
 
 /**
  * The configuration properties.
  *
  * @author Ben Manes (ben.manes@gmail.com)
- * @see https://code.google.com/p/jsonschema2pojo/
+ * @see https://code.google.com/p/jsonschema2pojo
  */
+@ToString
 public class JsonSchemaExtension implements GenerationConfig {
-
-  boolean generateBuilders = false
-  boolean usePrimitives = false
+  boolean generateBuilders
+  boolean usePrimitives
   Iterator<File> source
   File targetDirectory
-  String targetPackage = ''
+  String targetPackage
   char[] propertyWordDelimiters
-  boolean useLongIntegers = false
-  boolean includeHashcodeAndEquals = true
-  boolean includeToString = true
-  AnnotationStyle annotationStyle = AnnotationStyle.JACKSON
-  Class<? extends Annotator> customAnnotator = NoopAnnotator.class
-  boolean includeJsr303Annotations = false
-  SourceType sourceType = SourceType.JSONSCHEMA
+  boolean useLongIntegers
+  boolean includeHashcodeAndEquals
+  boolean includeToString
+  AnnotationStyle annotationStyle
+  Class<? extends Annotator> customAnnotator
+  boolean includeJsr303Annotations
+  SourceType sourceType
 
   public JsonSchemaExtension() {
+    // See DefaultGenerationConfig
+    generateBuilders = false
+    usePrimitives = false
     source = [].iterator()
+    targetPackage = ''
     propertyWordDelimiters = [] as char[]
+    useLongIntegers = false
+    includeHashcodeAndEquals = true
+    includeToString = true
+    annotationStyle = AnnotationStyle.JACKSON
+    customAnnotator = NoopAnnotator.class
+    includeJsr303Annotations = false
+    sourceType = SourceType.JSONSCHEMA
   }
 
   public void setSource(Iterable<File> files) {

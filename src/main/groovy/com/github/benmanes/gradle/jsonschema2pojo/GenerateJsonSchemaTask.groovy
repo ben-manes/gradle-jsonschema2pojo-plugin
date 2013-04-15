@@ -31,13 +31,15 @@ class GenerateJsonSchemaTask extends DefaultTask {
     description = 'Generates Java classes from a json schema.'
     group = 'Build'
 
+    outputs.upToDateWhen { false }
+    dependsOn(project.tasks.processResources)
+    project.tasks.compileJava.dependsOn(this)
+
     project.afterEvaluate {
       configure()
       outputs.dir configuration.targetDirectory
       project.sourceSets.main.java.srcDirs += [ configuration.targetDirectory ]
     }
-    dependsOn(project.tasks.processResources)
-    project.tasks.compileJava.dependsOn(this)
   }
 
   @TaskAction
@@ -48,9 +50,10 @@ class GenerateJsonSchemaTask extends DefaultTask {
   def configure() {
     configuration = project.jsonSchema2Pojo
     if (!configuration.source.hasNext()) {
-      configuration.source = project.files("${project.sourceSets.main.output.resourcesDir}")
+      configuration.source = project.files("${project.sourceSets.main.output.resourcesDir}/json")
+      configuration.source.mkdir()
     }
     configuration.targetDirectory = configuration.targetDirectory ?:
-      new File("${project.buildDir}/generated-sources/js2p")
+      project.file("${project.buildDir}/generated-sources/js2p")
   }
 }
