@@ -24,4 +24,5 @@ dependencies {
 jsonSchema2Pojo {
   targetPackage = 'example'
   includeJsr303Annotations = true
+  propertyWordDelimiters = ['_'] as char[]
 }
