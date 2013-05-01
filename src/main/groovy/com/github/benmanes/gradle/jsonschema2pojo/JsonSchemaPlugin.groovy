@@ -30,6 +30,6 @@ class JsonSchemaPlugin implements Plugin<Project> {
     project.apply plugin: 'java'
 
     project.extensions.create('jsonSchema2Pojo', JsonSchemaExtension)
-    project.tasks.add('generateJsonSchema2Pojo', GenerateJsonSchemaTask)
+    project.tasks.create('generateJsonSchema2Pojo', GenerateJsonSchemaTask)
   }
 }
