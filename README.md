@@ -1,4 +1,6 @@
-# Gradle jsonschema2pojo plugin
+# Gradle jsonschema2pojo plugin (deprecated)
+
+<b>jsonschema2pojo 0.3.8 includes an official plugin based on this one.</b>
 
 [jsonschema2pojo](http://www.jsonschema2pojo.org) generates a Java representation of your
 json schema. The [schema reference](https://code.google.com/p/jsonschema2pojo/wiki/Reference)
